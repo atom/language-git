@@ -1,0 +1,24 @@
+{
+  "beforeRunningCommand": "nop",
+  "command": "#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby\n\nrequire ENV['TM_BUNDLE_SUPPORT'] + '/environment.rb'\nrequire ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'\n\ngit = Git.new\npath = File.expand_path('..', git.git_dir(git.paths.first))\n\nbranches   = git.branch.list(:all)\nparameters = { \"branches\" => branches.map { |e| { \"name\" => e[:name] } } }\n\ntoken = open('|\"$DIALOG\" -a CompareBranches', 'r+') { |io| io << parameters.to_plist; io.close_write; io.read.chomp }\nres   = open('|\"$DIALOG\" -w' + token)               { |io| OSX::PropertyList.load(io) }\n        open('|\"$DIALOG\" -x' + token)               { |io| }\n\nif res && res['returnArgument']\n  parent = res['returnArgument'].first['name']\n  current = res['currentBranch'].first['name']\n  dispatch(:controller => \"diff\", :action => \"diff\", :branches => [parent, current])\nend\n",
+  "input": "none",
+  "inputFormat": "text",
+  "name": "Compare Branches…",
+  "outputCaret": "afterOutput",
+  "outputFormat": "html",
+  "outputLocation": "newWindow",
+  "requiredCommands": [
+    {
+      "command": "git",
+      "locations": [
+        "/usr/local/git/bin/git",
+        "/opt/local/bin/git",
+        "/usr/local/bin/git"
+      ],
+      "variable": "TM_GIT"
+    }
+  ],
+  "scope": "attr.scm.git",
+  "semanticClass": "action.scm.diff",
+  "version": 2
+}

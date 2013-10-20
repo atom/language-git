@@ -1,0 +1,63 @@
+<% render "_navigate_box", :locals => { :log_entries => @log_entries, :revision => @revision } %>
+<% render "_content", :locals => { :annotations => @annotations, :revision => @revision } %>
+
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    function show_annotation(revision)
+    {
+      $('content').update( dispatch({controller: 'annotate', action: "update", revision: revision}) );
+    }
+  
+    function keypress_listener(e) 
+    {
+      // if (e.keyCode==Event.KEY_LEFT)
+      //   $('debug').update('escape!!!');
+      // else
+      //   $('debug').update(e.keyCode)
+      
+      switch(e.keyCode) {
+        case 110: // n
+          if ($('rev').selectedIndex >= 1)
+          {
+            $('rev').selectedIndex = $('rev').selectedIndex - 1
+            $('rev').onchange();
+          }
+          break;
+        case 112: // p
+          if ($('rev').selectedIndex < $('rev').options.length - 1)
+          {
+            $('rev').selectedIndex = $('rev').selectedIndex + 1
+            $('rev').onchange();
+          }
+          break;
+        case 78: // P
+          $('rev').selectedIndex = 0;
+          $('rev').onchange();
+          break;
+        case 80: // N
+          $('rev').selectedIndex = $('rev').options.length - 1;
+          $('rev').onchange();
+          break;
+        case 98: // b
+          dispatch({controller: 'log', action: 'create_branch_from_revision', revision: $F('rev') })
+          break;
+        case 111: // o
+          dispatch({controller: 'log', action: 'open_revision', file_path: "<%=e_js ENV['TM_FILEPATH'] %>", revision: $F('rev') })
+          // 
+          break;
+        case 116: // t
+          dispatch({controller: 'log', action: 'create_tag_from_revision', file_path: "<%=e_js ENV['TM_FILEPATH'] %>", revision: $F('rev') })
+          // 
+          break;
+      }
+      // $('debug').update(e.keyCode);
+    }
+  
+    try {
+      Event.observe(document, "keypress", keypress_listener.bindAsEventListener());
+    }
+    catch (e) {
+      $('debug').update(e)
+    }
+  </script>
+<% end %>

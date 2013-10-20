@@ -1,0 +1,7 @@
+{
+  "name": "Style: Diff",
+  "scope": "text.git-commit source.diff",
+  "settings": {
+    "softWrap": false
+  }
+}
