@@ -1,6 +1,7 @@
 {
   "fileTypes": [
     ".git/config",
+    ".git\\config",
     ".gitconfig",
     "etc/gitconfig",
     ".gitmodules"
