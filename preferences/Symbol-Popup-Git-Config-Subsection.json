@@ -1,8 +1,0 @@
-{
-  "name": "Symbol Popup: Git Config Subsection",
-  "scope": "entity.name.section.subsection.git-config - punctuation.definition.section.subsection",
-  "settings": {
-    "showInSymbolList": 1,
-    "symbolTransformation": "\n\t\ts/^/ /; # indent subsections\n\t"
-  }
-}

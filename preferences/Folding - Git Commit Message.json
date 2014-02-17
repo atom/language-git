@@ -1,8 +1,0 @@
-{
-  "name": "Folding (Git Commit Message)",
-  "scope": "text.git-commit",
-  "settings": {
-    "foldingStartMarker": "^\\+\\+\\+",
-    "foldingStopMarker": "^---"
-  }
-}

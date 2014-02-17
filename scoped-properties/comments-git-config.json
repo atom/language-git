@@ -1,0 +1,7 @@
+{
+  "source.git-config": {
+    "editor": {
+      "commentStart": "# "
+    }
+  }
+}

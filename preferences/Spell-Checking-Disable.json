@@ -1,7 +1,0 @@
-{
-  "name": "Spell Checking: Disable",
-  "scope": "meta.scope.metadata.git-commit",
-  "settings": {
-    "spellChecking": "0"
-  }
-}
