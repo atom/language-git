@@ -1,5 +1,5 @@
 {
-  "source.git-config": {
+  ".source.git-config": {
     "editor": {
       "commentStart": "# "
     }
