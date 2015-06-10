@@ -22,11 +22,11 @@
             'match': '\\G((fixup|squash)!)\\s*'
           }
           {
-            'match': '.{66,}$'
+            'match': '.{65,}$'
             'name': 'invalid.illegal.line-too-long.git-commit'
           }
           {
-            'match': '.{51,}$'
+            'match': '.{50,}$'
             'name': 'invalid.deprecated.line-too-long.git-commit'
           }
         ]
