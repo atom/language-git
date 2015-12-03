@@ -1,10 +1,11 @@
+'name': 'Git Config'
+'scopeName': 'source.git-config'
 'fileTypes': [
   '.git/config'
   '.gitconfig'
   'etc/gitconfig'
   '.gitmodules'
 ]
-'name': 'Git Config'
 'patterns': [
   {
     'include': '#section'
@@ -71,6 +72,9 @@
         'name': 'invalid.illegal.unknown-escape.git-config'
       }
     ]
+  'escaped-string':
+    'match': '\\\\"'
+    'name': 'constant.character.escape.git-config'
   'value_pair':
     'begin': '([-\\w]+)\\s*(=)\\s*(?!$)'
     'captures':
@@ -85,10 +89,12 @@
         'include': '#boolean'
       }
       {
+        'include': '#escaped-string'
+      }
+      {
         'include': '#string'
       }
       {
         'include': '#comment'
       }
     ]
-'scopeName': 'source.git-config'
