@@ -1,7 +1,8 @@
+'name': 'Git Rebase Message'
+'scopeName': 'text.git-rebase'
 'fileTypes': [
   'git-rebase-todo'
 ]
-'name': 'Git Rebase Message'
 'patterns': [
   {
     'captures':
@@ -22,4 +23,3 @@
     'name': 'meta.commit-command.git-rebase'
   }
 ]
-'scopeName': 'text.git-rebase'

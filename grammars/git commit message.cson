@@ -1,10 +1,11 @@
+'name': 'Git Commit Message'
+'scopeName': 'text.git-commit'
 'fileTypes': [
   'COMMIT_EDITMSG'
   'MERGE_MSG'
 ]
 'foldingStartMarker': '^\\+\\+\\+'
 'foldingStopMarker': '^---'
-'name': 'Git Commit Message'
 'patterns': [
   {
     'begin': '\\A(?!#)'
@@ -106,4 +107,3 @@
         ]
       }
     ]
-'scopeName': 'text.git-commit'
