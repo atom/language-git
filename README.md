@@ -1,4 +1,4 @@
-# Git editing support in Atom
+# Git editing support in Atom [![Build Status](https://travis-ci.org/atom/language-git.svg?branch=master)](https://travis-ci.org/atom/language-git)
 
 Adds syntax highlighting to Git commit, merge, and rebase messages edited in
 Atom.
