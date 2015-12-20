@@ -2,6 +2,7 @@
 'scopeName': 'source.git-config'
 'fileTypes': [
   '.git/config'
+  'git/config'
   '.gitconfig'
   'etc/gitconfig'
   '.gitmodules'
