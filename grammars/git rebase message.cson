@@ -19,7 +19,7 @@
         'name': 'constant.sha.git-rebase'
       '3':
         'name': 'meta.commit-message.git-rebase'
-    'match': '^\\s*(pick|p|reword|r|edit|e|squash|s|fixup|f)\\s+([0-9a-f]+)\\s+(.*)$'
+    'match': '^\\s*(pick|p|reword|r|edit|e|squash|s|fixup|f|drop|d)\\s+([0-9a-f]+)\\s+(.*)$'
     'name': 'meta.commit-command.git-rebase'
   }
 ]
