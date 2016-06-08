@@ -22,4 +22,17 @@
     'match': '^\\s*(pick|p|reword|r|edit|e|squash|s|fixup|f|drop|d)\\s+([0-9a-f]+)\\s+(.*)$'
     'name': 'meta.commit-command.git-rebase'
   }
+  {
+    'begin': '^\\s*(exec|x)\\s+'
+    'beginCaptures':
+      '1':
+        'name': 'support.function.git-rebase'
+    'end': '$'
+    'name': 'meta.exec-command.git-rebase'
+    'patterns': [
+      {
+        'include': 'source.shell'
+      }
+    ]
+  }
 ]
