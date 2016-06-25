@@ -9,33 +9,35 @@
 'patterns': [
   {
     'begin': '\\A(?!#)'
-    'end': '(?=# Please enter the commit message)'
+    'end': '^(?<!\\A)(?=# Please enter the commit message)'
     'name': 'meta.scope.message.git-commit'
     'patterns': [
       {
-        'begin': '\\G'
-        'end': '^(?!\\G)'
-        'patterns': [
-          {
-            'captures':
-              '1':
-                'name': 'keyword.other.$2.git-commit'
-            'match': '\\G((fixup|squash)!)\\s*'
-          }
-          {
-            'match': '.{66,}$'
-            'name': 'invalid.illegal.line-too-long.git-commit'
-          }
-          {
-            'match': '.{51,}$'
-            'name': 'invalid.deprecated.line-too-long.git-commit'
-          }
-        ]
+        'match': '\\G((fixup|squash)!)'
+        'captures':
+          '1':
+            'name': 'keyword.other.$2.git-commit'
+      }
+      {
+        'match': '^#.*$'
+        'name': 'comment.line.number-sign.git-commit'
+      }
+      {
+        'match': '\\A(?!#).{70,}'
+        'name': 'invalid.illegal.line-too-long.git-commit'
+      }
+      {
+        'match': '\\A(?!#).{51,}'
+        'name': 'invalid.deprecated.line-too-long.git-commit'
+      }
+      {
+        'match': '^(?!#).{73,}'
+        'name': 'invalid.illegal.line-too-long.git-commit'
       }
     ]
   }
   {
-    'begin': '(?=# Please enter the commit message)'
+    'begin': '(?<=^)(?=# Please enter the commit message)'
     'end': '\\z'
     'name': 'meta.scope.metadata.git-commit'
     'patterns': [
@@ -81,7 +83,7 @@
         ]
       }
       {
-        'begin': '(^[ \\t]+)?(?=#)'
+        'begin': '^(?=#)'
         'beginCaptures':
           '1':
             'name': 'punctuation.whitespace.comment.leading.git-commit'
