@@ -13,10 +13,10 @@
     'name': 'meta.scope.message.git-commit'
     'patterns': [
       {
+        'match': '\\G((fixup|squash)!)'
         'captures':
           '1':
             'name': 'keyword.other.$2.git-commit'
-        'match': '\\G((fixup|squash)!)\\s*'
       }
       {
         'match': '^#.*$'
