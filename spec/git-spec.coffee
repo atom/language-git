@@ -29,6 +29,16 @@ describe "Git grammars", ->
       expect(grammar).toBeTruthy()
       expect(grammar.scopeName).toBe "text.git-rebase"
 
+    for cmd in ["pick", "p", "reword", "r", "edit", "e", "squash", "s", "fixup", "f", "drop", "d"]
+      it "parses the #{cmd} command", ->
+        {tokens} = grammar.tokenizeLine "#{cmd} c0ffeee This is commit message"
+
+        expect(tokens[0]).toEqual value: cmd, scopes: ["text.git-rebase", "meta.commit-command.git-rebase", "support.function.git-rebase"]
+        expect(tokens[1]).toEqual value: " ", scopes: ["text.git-rebase", "meta.commit-command.git-rebase"]
+        expect(tokens[2]).toEqual value: "c0ffeee", scopes: ["text.git-rebase", "meta.commit-command.git-rebase", "constant.sha.git-rebase"]
+        expect(tokens[3]).toEqual value: " ", scopes: ["text.git-rebase", "meta.commit-command.git-rebase"]
+        expect(tokens[4]).toEqual value: "This is commit message", scopes: ["text.git-rebase", "meta.commit-command.git-rebase", "meta.commit-message.git-rebase"]
+
     it "parses the exec command", ->
       {tokens} = grammar.tokenizeLine "exec"
 
