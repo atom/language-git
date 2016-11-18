@@ -29,8 +29,10 @@
       }
       {
         # First line 51 chars or longer
-        'match': '\\A(?!#).{51,}'
-        'name': 'invalid.deprecated.line-too-long.git-commit'
+        'match': '\\A(?!#).{50}(.+)'
+        'captures':
+          '1':
+            'name': 'invalid.deprecated.line-too-long.git-commit'
       }
       {
         # Not-first-line 73 chars or longer
