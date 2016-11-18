@@ -24,12 +24,16 @@
       }
       {
         # First line 70 chars or longer
-        'match': '\\A(?!#).{70,}'
-        'name': 'invalid.illegal.line-too-long.git-commit'
+        'match': '\\A(?!#).{50}(.{19})(.+)'
+        'captures':
+          '1':
+            'name': 'invalid.deprecated.line-too-long.git-commit'
+          '2':
+            'name': 'invalid.illegal.line-too-long.git-commit'
       }
       {
-        # First line 51 chars or longer
-        'match': '\\A(?!#).{50}(.+)'
+        # First line 51-69 chars
+        'match': '\\A(?!#).{50}(.{0,19})'
         'captures':
           '1':
             'name': 'invalid.deprecated.line-too-long.git-commit'
