@@ -23,16 +23,21 @@
         'name': 'comment.line.number-sign.git-commit'
       }
       {
+        # First line 70 chars or longer
         'match': '\\A(?!#).{70,}'
         'name': 'invalid.illegal.line-too-long.git-commit'
       }
       {
+        # First line 51 chars or longer
         'match': '\\A(?!#).{51,}'
         'name': 'invalid.deprecated.line-too-long.git-commit'
       }
       {
-        'match': '^(?!#).{73,}'
-        'name': 'invalid.illegal.line-too-long.git-commit'
+        # Not-first-line 73 chars or longer
+        'match': '^(?!#).{72}(.+)'
+        'captures':
+          '1':
+            'name': 'invalid.illegal.line-too-long.git-commit'
       }
     ]
   }
