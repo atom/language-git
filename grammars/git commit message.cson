@@ -23,6 +23,11 @@
         'name': 'comment.line.number-sign.git-commit'
       }
       {
+        # See: http://chris.beams.io/posts/git-commit/#capitalize
+        'match': '\\A[a-z]'
+        'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
+      }
+      {
         # Subject line 70 chars or longer
         'match': '\\A(?!#).{50}(.{19})(.+)'
         'captures':
