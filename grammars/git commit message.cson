@@ -23,16 +23,27 @@
         'name': 'comment.line.number-sign.git-commit'
       }
       {
-        'match': '\\A(?!#).{70,}'
-        'name': 'invalid.illegal.line-too-long.git-commit'
+        # Subject line 70 chars or longer
+        'match': '\\A(?!#).{50}(.{19})(.+)'
+        'captures':
+          '1':
+            'name': 'invalid.deprecated.line-too-long.git-commit'
+          '2':
+            'name': 'invalid.illegal.line-too-long.git-commit'
       }
       {
-        'match': '\\A(?!#).{51,}'
-        'name': 'invalid.deprecated.line-too-long.git-commit'
+        # Subject line 51-69 chars
+        'match': '\\A(?!#).{50}(.{0,19})'
+        'captures':
+          '1':
+            'name': 'invalid.deprecated.line-too-long.git-commit'
       }
       {
-        'match': '^(?!#).{73,}'
-        'name': 'invalid.illegal.line-too-long.git-commit'
+        # Body line 73 chars or longer
+        'match': '^(?!#).{72}(.+)'
+        'captures':
+          '1':
+            'name': 'invalid.illegal.line-too-long.git-commit'
       }
     ]
   }
