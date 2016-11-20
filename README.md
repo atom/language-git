@@ -11,6 +11,16 @@ You can configure Atom to be your Git editor with the following command:
 git config --global core.editor "atom --wait"
 ```
 
+## Commit message highlighting
+
+This package uses warning and error highlighting to help bring attention to some violations of [standard conventions around commit message best practices](http://chris.beams.io/posts/git-commit/#seven-rules):
+
+1. If the subject line goes beyond 50 characters and again if it goes beyond 72 characters
+1. If the subject line begins with a lower-case letter (emoji at the beginning of the subject line won't be highlighted)
+1. If any non-comment body line goes beyond 72 characters
+
+## Background
+
 Originally [converted](http://flight-manual.atom.io/hacking-atom/sections/converting-from-textmate) from the [Git TextMate bundle](https://github.com/textmate/git.tmbundle).
 
 Contributions are greatly appreciated. Please fork this repository and open a pull request to add snippets, make grammar tweaks, etc.
