@@ -23,7 +23,8 @@
         'name': 'comment.line.number-sign.git-commit'
       }
       {
-        # See: http://chris.beams.io/posts/git-commit/#capitalize
+        # Subject line should be capitalized, see:
+        # http://chris.beams.io/posts/git-commit/#capitalize
         'match': '\\A[a-z]'
         'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
       }
