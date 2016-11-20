@@ -13,16 +13,11 @@ git config --global core.editor "atom --wait"
 
 ## Commit message highlighting
 
-Violations of [The seven rules of a great git commit message](http://chris.beams.io/posts/git-commit/#seven-rules)
-are highlighted as follows:
-1. _Not highlighted_: Separate subject from body with a blank line
-2. _Overflow highlighted_: Limit the subject line to 50 characters
-3. _Initial lowercase letter is highlighted_: Capitalize the subject line
-4. _Not highlighted_: Do not end the subject line with a period
-5. _Not highlighted_: Use the imperative mood in the subject line
-6. _Overflow highlighted_: Wrap the body at 72 characters
-7. _Not highlighted_: Use the body to explain what and why vs. how
+This package uses warning and error highlighting to help bring attention to some violations of [standard conventions around commit message best practices](http://chris.beams.io/posts/git-commit/#seven-rules):
 
+1. If the subject line goes beyond 50 characters and again if it goes beyond 72 characters
+1. If the subject line begins with a lower-case letter (emoji at the beginning of the subject line won't be highlighted)
+1. If any non-comment body line goes beyond 72 characters
 
 ## Background
 
