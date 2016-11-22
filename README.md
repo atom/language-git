@@ -20,6 +20,15 @@ This package uses warning and error highlighting to help bring attention to some
 1. If the subject line ends with a period
 1. If any non-comment body line goes beyond 72 characters
 
+## Rebase message keyboard shortcuts
+
+When rebasing, `git` tells you that you can `p`ick, `r`eword, `e`dit, `s`quash,
+`d`rop or `f`ixup changes.
+
+With language-git, just pressing the initial letter will switch the verb on the
+current line to the indicated one, and place the cursor at the start of the
+current line.
+
 ## Background
 
 Originally [converted](http://flight-manual.atom.io/hacking-atom/sections/converting-from-textmate) from the [Git TextMate bundle](https://github.com/textmate/git.tmbundle).
