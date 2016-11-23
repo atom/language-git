@@ -14,12 +14,111 @@ describe "Git grammars", ->
       expect(grammar.scopeName).toBe "source.git-config"
 
   describe "Git commit messages", ->
+    hilight = (subject) ->
+      {tokens} = grammar.tokenizeLine(subject, null, true)
+      returnMe = ''
+      for token in tokens
+        char = ' '
+        for scope in token.scopes
+          char = 'd' if scope.match(/deprecated/)
+          char = 'i' if scope.match(/illegal/)
+
+        # From: https://coffeescript-cookbook.github.io/chapters/strings/repeating
+        returnMe += Array(token.value.length + 1).join(char)
+
+      return returnMe
+
     beforeEach ->
       grammar = atom.grammars.grammarForScopeName("text.git-commit")
 
     it "parses the Git commit message grammar", ->
       expect(grammar).toBeTruthy()
       expect(grammar.scopeName).toBe "text.git-commit"
+
+    it "highlights subject lines of less than 50 chars correctly", ->
+      expect(
+        hilight("123456789012345678901234567890")).
+        toEqual("                              ")
+      expect(
+        hilight("a23456789012345678901234567890")).
+        toEqual("i                             ")
+      expect(
+        hilight("12345678901234567890123456789.")).
+        toEqual("                             i")
+      expect(
+        hilight("b2345678901234567890123456789.")).
+        toEqual("i                            i")
+
+    it "highlights subject lines of 50 chars correctly", ->
+      expect(
+        hilight("12345678901234567890123456789012345678901234567890")).
+        toEqual("                                                  ")
+      expect(
+        hilight("c2345678901234567890123456789012345678901234567890")).
+        toEqual("i                                                 ")
+      expect(
+        hilight("1234567890123456789012345678901234567890123456789.")).
+        toEqual("                                                 i")
+      expect(
+        hilight("d234567890123456789012345678901234567890123456789.")).
+        toEqual("i                                                i")
+
+    it "highlights subject lines of 51 chars correctly", ->
+      expect(
+        hilight("123456789012345678901234567890123456789012345678901")).
+        toEqual("                                                  d")
+      expect(
+        hilight("e23456789012345678901234567890123456789012345678901")).
+        toEqual("i                                                 d")
+      expect(
+        hilight("12345678901234567890123456789012345678901234567890.")).
+        toEqual("                                                  i")
+      expect(
+        hilight("f2345678901234567890123456789012345678901234567890.")).
+        toEqual("i                                                 i")
+
+    it "highlights subject lines of 69 chars correctly", ->
+      expect(
+        hilight("123456789012345678901234567890123456789012345678901234567890123456789")).
+        toEqual("                                                  ddddddddddddddddddd")
+      expect(
+        hilight("g23456789012345678901234567890123456789012345678901234567890123456789")).
+        toEqual("i                                                 ddddddddddddddddddd")
+      expect(
+        hilight("12345678901234567890123456789012345678901234567890123456789012345678.")).
+        toEqual("                                                  ddddddddddddddddddi")
+      expect(
+        hilight("h2345678901234567890123456789012345678901234567890123456789012345678.")).
+        toEqual("i                                                 ddddddddddddddddddi")
+
+    it "highlights subject lines of 70 chars correctly", ->
+      # 70 chars
+      expect(
+        hilight("1234567890123456789012345678901234567890123456789012345678901234567890")).
+        toEqual("                                                  dddddddddddddddddddi")
+      expect(
+        hilight("g234567890123456789012345678901234567890123456789012345678901234567890")).
+        toEqual("i                                                 dddddddddddddddddddi")
+      expect(
+        hilight("123456789012345678901234567890123456789012345678901234567890123456789.")).
+        toEqual("                                                  dddddddddddddddddddi")
+      expect(
+        hilight("h23456789012345678901234567890123456789012345678901234567890123456789.")).
+        toEqual("i                                                 dddddddddddddddddddi")
+
+    it "highlights subject lines of over 70 chars correctly", ->
+      expect(
+        hilight("12345678901234567890123456789012345678901234567890123456789012345678901234")).
+        toEqual("                                                  dddddddddddddddddddiiiii")
+      expect(
+        hilight("g2345678901234567890123456789012345678901234567890123456789012345678901234")).
+        toEqual("i                                                 dddddddddddddddddddiiiii")
+      expect(
+        hilight("1234567890123456789012345678901234567890123456789012345678901234567890123.")).
+        toEqual("                                                  dddddddddddddddddddiiiii")
+      expect(
+        hilight("h234567890123456789012345678901234567890123456789012345678901234567890123.")).
+        toEqual("i                                                 dddddddddddddddddddiiiii")
 
   describe "Git rebases", ->
     beforeEach ->

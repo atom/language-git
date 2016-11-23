@@ -17,6 +17,7 @@ This package uses warning and error highlighting to help bring attention to some
 
 1. If the subject line goes beyond 50 characters and again if it goes beyond 72 characters
 1. If the subject line begins with a lower-case letter (emoji at the beginning of the subject line won't be highlighted)
+1. If the subject line ends with a period
 1. If any non-comment body line goes beyond 72 characters
 
 ## Background

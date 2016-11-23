@@ -23,26 +23,37 @@
         'name': 'comment.line.number-sign.git-commit'
       }
       {
-        # Subject line should be capitalized, see:
-        # http://chris.beams.io/posts/git-commit/#capitalize
-        'match': '\\A[a-z]'
-        'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
-      }
-      {
-        # Subject line 70 chars or longer
-        'match': '\\A(?!#).{50}(.{19})(.+)'
+        # Subject line 0-50 chars
+        'match': '\\A(?!#)(([a-z])|.).{0,48}((\\.)|.)$'
         'captures':
-          '1':
-            'name': 'invalid.deprecated.line-too-long.git-commit'
           '2':
-            'name': 'invalid.illegal.line-too-long.git-commit'
+            'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
+          '4':
+            'name': 'invalid.illegal.subject-no-trailing-period.git-commit'
       }
       {
         # Subject line 51-69 chars
-        'match': '\\A(?!#).{50}(.{0,19})'
+        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,18})((\\.)|(.))$'
         'captures':
-          '1':
+          '2':
+            'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
+          '3':
             'name': 'invalid.deprecated.line-too-long.git-commit'
+          '5':
+            'name': 'invalid.illegal.subject-no-trailing-period.git-commit'
+          '6':
+            'name': 'invalid.deprecated.line-too-long.git-commit'
+      }
+      {
+        # Subject line 70 chars or longer
+        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,19})(.+)$'
+        'captures':
+          '2':
+            'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
+          '3':
+            'name': 'invalid.deprecated.line-too-long.git-commit'
+          '4':
+            'name': 'invalid.illegal.line-too-long.git-commit'
       }
       {
         # Body line 73 chars or longer
