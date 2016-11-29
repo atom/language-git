@@ -14,6 +14,32 @@ describe "Git grammars", ->
       expect(grammar.scopeName).toBe "source.git-config"
 
   describe "Git commit messages", ->
+    beforeEach ->
+      grammar = atom.grammars.grammarForScopeName("text.git-commit")
+
+    it "parses the Git commit message grammar", ->
+      expect(grammar).toBeTruthy()
+      expect(grammar.scopeName).toBe "text.git-commit"
+
+    # Highlight a commit message subject and render the result as a string.
+    #
+    # Each characted in the returned string represents how the corresponding
+    # char in the input string is highlighted:
+    # " " means not highlighted
+    # "d" means highlighted as deprecated
+    # "i" means highlighted as illegal
+    #
+    # For example, highlighting of
+    # "b2345678901234567890123456789." will be rendered as
+    # "i                            i", meaning that the first and the last char
+    # of the input string are "illegal".
+    #
+    # This enables writing subject line highlighting tests visually.
+    #
+    # The name of the function is designed to be the same length as "toEqual",
+    # so that the input string and the rendered string can be aligned underneath
+    # each other in the test cases. Make sure you use a fixed-width font in your
+    # editor :-).
     hilight = (subject) ->
       {tokens} = grammar.tokenizeLine(subject, null, true)
       returnMe = ''
@@ -27,13 +53,6 @@ describe "Git grammars", ->
         returnMe += Array(token.value.length + 1).join(char)
 
       return returnMe
-
-    beforeEach ->
-      grammar = atom.grammars.grammarForScopeName("text.git-commit")
-
-    it "parses the Git commit message grammar", ->
-      expect(grammar).toBeTruthy()
-      expect(grammar.scopeName).toBe "text.git-commit"
 
     it "highlights subject lines of less than 50 chars correctly", ->
       expect(
