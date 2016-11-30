@@ -14,6 +14,18 @@ describe "Git grammars", ->
       expect(grammar.scopeName).toBe "source.git-config"
 
   describe "Git commit messages", ->
+    scopeNormal =  [ 'text.git-commit', 'meta.scope.message.git-commit' ]
+
+    scopeLeadingLowercase =
+      [ 'text.git-commit', 'meta.scope.message.git-commit', 'invalid.illegal.first-char-should-be-uppercase.git-commit' ]
+
+    scopeTrailingPeriod =
+      [ 'text.git-commit', 'meta.scope.message.git-commit', 'invalid.illegal.subject-no-trailing-period.git-commit' ]
+
+    scopeTooLong1 = [ 'text.git-commit', 'meta.scope.message.git-commit', 'invalid.deprecated.line-too-long.git-commit' ]
+
+    scopeTooLong2 = [ 'text.git-commit', 'meta.scope.message.git-commit', 'invalid.illegal.line-too-long.git-commit' ]
+
     beforeEach ->
       grammar = atom.grammars.grammarForScopeName("text.git-commit")
 
@@ -21,123 +33,127 @@ describe "Git grammars", ->
       expect(grammar).toBeTruthy()
       expect(grammar.scopeName).toBe "text.git-commit"
 
-    # Highlight a commit message subject and render the result as a string.
-    #
-    # Each characted in the returned string represents how the corresponding
-    # char in the input string is highlighted:
-    # " " means not highlighted
-    # "d" means highlighted as deprecated
-    # "i" means highlighted as illegal
-    #
-    # For example, highlighting of
-    # "b2345678901234567890123456789." will be rendered as
-    # "i                            i", meaning that the first and the last char
-    # of the input string are "illegal".
-    #
-    # This enables writing subject line highlighting tests visually.
-    #
-    # The name of the function is designed to be the same length as "toEqual",
-    # so that the input string and the rendered string can be aligned underneath
-    # each other in the test cases. Make sure you use a fixed-width font in your
-    # editor :-).
-    hilight = (subject) ->
-      {tokens} = grammar.tokenizeLine(subject, null, true)
-      returnMe = ''
-      for token in tokens
-        char = ' '
-        for scope in token.scopes
-          char = 'd' if scope.match(/deprecated/)
-          char = 'i' if scope.match(/illegal/)
-
-        # From: https://coffeescript-cookbook.github.io/chapters/strings/repeating
-        returnMe += Array(token.value.length + 1).join(char)
-
-      return returnMe
-
     it "highlights subject lines of less than 50 chars correctly", ->
-      expect(
-        hilight("123456789012345678901234567890")).
-        toEqual("                              ")
-      expect(
-        hilight("a23456789012345678901234567890")).
-        toEqual("i                             ")
-      expect(
-        hilight("12345678901234567890123456789.")).
-        toEqual("                             i")
-      expect(
-        hilight("b2345678901234567890123456789.")).
-        toEqual("i                            i")
+      {tokens} = grammar.tokenizeLine("123456789012345678901234567890", null, true)
+      expect(tokens[0]).toEqual value: '123456789012345678901234567890', scopes: scopeNormal
+
+      {tokens} = grammar.tokenizeLine("a23456789012345678901234567890", null, true)
+      expect(tokens[0]).toEqual value: 'a', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '23456789012345678901234567890', scopes: scopeNormal
+
+      {tokens} = grammar.tokenizeLine("12345678901234567890123456789.", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '.', scopes: scopeTrailingPeriod
+
+      {tokens} = grammar.tokenizeLine("b2345678901234567890123456789.", null, true)
+      expect(tokens[0]).toEqual value: 'b', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '.', scopes: scopeTrailingPeriod
 
     it "highlights subject lines of 50 chars correctly", ->
-      expect(
-        hilight("12345678901234567890123456789012345678901234567890")).
-        toEqual("                                                  ")
-      expect(
-        hilight("c2345678901234567890123456789012345678901234567890")).
-        toEqual("i                                                 ")
-      expect(
-        hilight("1234567890123456789012345678901234567890123456789.")).
-        toEqual("                                                 i")
-      expect(
-        hilight("d234567890123456789012345678901234567890123456789.")).
-        toEqual("i                                                i")
+      {tokens} = grammar.tokenizeLine("12345678901234567890123456789012345678901234567890", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+
+      {tokens} = grammar.tokenizeLine("c2345678901234567890123456789012345678901234567890", null, true)
+      expect(tokens[0]).toEqual value: 'c', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+
+      {tokens} = grammar.tokenizeLine("1234567890123456789012345678901234567890123456789.", null, true)
+      expect(tokens[0]).toEqual value: '1234567890123456789012345678901234567890123456789', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '.', scopes: scopeTrailingPeriod
+
+      {tokens} = grammar.tokenizeLine("d234567890123456789012345678901234567890123456789.", null, true)
+      expect(tokens[0]).toEqual value: 'd', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '234567890123456789012345678901234567890123456789', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '.', scopes: scopeTrailingPeriod
 
     it "highlights subject lines of 51 chars correctly", ->
-      expect(
-        hilight("123456789012345678901234567890123456789012345678901")).
-        toEqual("                                                  d")
-      expect(
-        hilight("e23456789012345678901234567890123456789012345678901")).
-        toEqual("i                                                 d")
-      expect(
-        hilight("12345678901234567890123456789012345678901234567890.")).
-        toEqual("                                                  i")
-      expect(
-        hilight("f2345678901234567890123456789012345678901234567890.")).
-        toEqual("i                                                 i")
+      {tokens} = grammar.tokenizeLine("123456789012345678901234567890123456789012345678901", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '1', scopes: scopeTooLong1
+
+      {tokens} = grammar.tokenizeLine("e23456789012345678901234567890123456789012345678901", null, true)
+      expect(tokens[0]).toEqual value: 'e', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '1', scopes: scopeTooLong1
+
+      {tokens} = grammar.tokenizeLine("12345678901234567890123456789012345678901234567890.", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '.', scopes: scopeTrailingPeriod
+
+      {tokens} = grammar.tokenizeLine("f2345678901234567890123456789012345678901234567890.", null, true)
+      expect(tokens[0]).toEqual value: 'f', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '.', scopes: scopeTrailingPeriod
 
     it "highlights subject lines of 69 chars correctly", ->
-      expect(
-        hilight("123456789012345678901234567890123456789012345678901234567890123456789")).
-        toEqual("                                                  ddddddddddddddddddd")
-      expect(
-        hilight("g23456789012345678901234567890123456789012345678901234567890123456789")).
-        toEqual("i                                                 ddddddddddddddddddd")
-      expect(
-        hilight("12345678901234567890123456789012345678901234567890123456789012345678.")).
-        toEqual("                                                  ddddddddddddddddddi")
-      expect(
-        hilight("h2345678901234567890123456789012345678901234567890123456789012345678.")).
-        toEqual("i                                                 ddddddddddddddddddi")
+      {tokens} = grammar.tokenizeLine("123456789012345678901234567890123456789012345678901234567890123456789", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '123456789012345678', scopes: scopeTooLong1
+      expect(tokens[2]).toEqual value: '9', scopes: scopeTooLong1
+
+      {tokens} = grammar.tokenizeLine("g23456789012345678901234567890123456789012345678901234567890123456789", null, true)
+      expect(tokens[0]).toEqual value: 'g', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '123456789012345678', scopes: scopeTooLong1
+      expect(tokens[3]).toEqual value: '9', scopes: scopeTooLong1
+
+      {tokens} = grammar.tokenizeLine("12345678901234567890123456789012345678901234567890123456789012345678.", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '123456789012345678', scopes: scopeTooLong1
+      expect(tokens[2]).toEqual value: '.', scopes: scopeTrailingPeriod
+
+      {tokens} = grammar.tokenizeLine("h2345678901234567890123456789012345678901234567890123456789012345678.", null, true)
+      expect(tokens[0]).toEqual value: 'h', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '123456789012345678', scopes: scopeTooLong1
+      expect(tokens[3]).toEqual value: '.', scopes: scopeTrailingPeriod
 
     it "highlights subject lines of 70 chars correctly", ->
-      # 70 chars
-      expect(
-        hilight("1234567890123456789012345678901234567890123456789012345678901234567890")).
-        toEqual("                                                  dddddddddddddddddddi")
-      expect(
-        hilight("g234567890123456789012345678901234567890123456789012345678901234567890")).
-        toEqual("i                                                 dddddddddddddddddddi")
-      expect(
-        hilight("123456789012345678901234567890123456789012345678901234567890123456789.")).
-        toEqual("                                                  dddddddddddddddddddi")
-      expect(
-        hilight("h23456789012345678901234567890123456789012345678901234567890123456789.")).
-        toEqual("i                                                 dddddddddddddddddddi")
+      {tokens} = grammar.tokenizeLine("1234567890123456789012345678901234567890123456789012345678901234567890", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[2]).toEqual value: '0', scopes: scopeTooLong2
+
+      {tokens} = grammar.tokenizeLine("i234567890123456789012345678901234567890123456789012345678901234567890", null, true)
+      expect(tokens[0]).toEqual value: 'i', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[3]).toEqual value: '0', scopes: scopeTooLong2
+
+      {tokens} = grammar.tokenizeLine("123456789012345678901234567890123456789012345678901234567890123456789.", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[2]).toEqual value: '.', scopes: scopeTooLong2
+
+      {tokens} = grammar.tokenizeLine("j23456789012345678901234567890123456789012345678901234567890123456789.", null, true)
+      expect(tokens[0]).toEqual value: 'j', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[3]).toEqual value: '.', scopes: scopeTooLong2
 
     it "highlights subject lines of over 70 chars correctly", ->
-      expect(
-        hilight("12345678901234567890123456789012345678901234567890123456789012345678901234")).
-        toEqual("                                                  dddddddddddddddddddiiiii")
-      expect(
-        hilight("g2345678901234567890123456789012345678901234567890123456789012345678901234")).
-        toEqual("i                                                 dddddddddddddddddddiiiii")
-      expect(
-        hilight("1234567890123456789012345678901234567890123456789012345678901234567890123.")).
-        toEqual("                                                  dddddddddddddddddddiiiii")
-      expect(
-        hilight("h234567890123456789012345678901234567890123456789012345678901234567890123.")).
-        toEqual("i                                                 dddddddddddddddddddiiiii")
+      {tokens} = grammar.tokenizeLine("12345678901234567890123456789012345678901234567890123456789012345678901234", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[2]).toEqual value: '01234', scopes: scopeTooLong2
+
+      {tokens} = grammar.tokenizeLine("k2345678901234567890123456789012345678901234567890123456789012345678901234", null, true)
+      expect(tokens[0]).toEqual value: 'k', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[3]).toEqual value: '01234', scopes: scopeTooLong2
+
+      {tokens} = grammar.tokenizeLine("1234567890123456789012345678901234567890123456789012345678901234567890123.", null, true)
+      expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[1]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[2]).toEqual value: '0123.', scopes: scopeTooLong2
+
+      {tokens} = grammar.tokenizeLine("m234567890123456789012345678901234567890123456789012345678901234567890123.", null, true)
+      expect(tokens[0]).toEqual value: 'm', scopes: scopeLeadingLowercase
+      expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
+      expect(tokens[2]).toEqual value: '1234567890123456789', scopes: scopeTooLong1
+      expect(tokens[3]).toEqual value: '0123.', scopes: scopeTooLong2
 
   describe "Git rebases", ->
     beforeEach ->
