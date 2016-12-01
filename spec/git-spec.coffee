@@ -124,13 +124,13 @@ describe "Git grammars", ->
       {tokens} = grammar.tokenizeLine("123456789012345678901234567890123456789012345678901234567890123456789.", null, true)
       expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
       expect(tokens[1]).toEqual value: '1234567890123456789', scopes: scopeLineOver50
-      expect(tokens[2]).toEqual value: '.', scopes: scopeLineOver70
+      expect(tokens[2]).toEqual value: '.', scopes: scopeTrailingPeriod
 
       {tokens} = grammar.tokenizeLine("j23456789012345678901234567890123456789012345678901234567890123456789.", null, true)
       expect(tokens[0]).toEqual value: 'j', scopes: scopeLeadingLowercase
       expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
       expect(tokens[2]).toEqual value: '1234567890123456789', scopes: scopeLineOver50
-      expect(tokens[3]).toEqual value: '.', scopes: scopeLineOver70
+      expect(tokens[3]).toEqual value: '.', scopes: scopeTrailingPeriod
 
     it "highlights subject lines of over 70 chars correctly", ->
       {tokens} = grammar.tokenizeLine("12345678901234567890123456789012345678901234567890123456789012345678901234", null, true)
@@ -147,13 +147,15 @@ describe "Git grammars", ->
       {tokens} = grammar.tokenizeLine("1234567890123456789012345678901234567890123456789012345678901234567890123.", null, true)
       expect(tokens[0]).toEqual value: '12345678901234567890123456789012345678901234567890', scopes: scopeNormal
       expect(tokens[1]).toEqual value: '1234567890123456789', scopes: scopeLineOver50
-      expect(tokens[2]).toEqual value: '0123.', scopes: scopeLineOver70
+      expect(tokens[2]).toEqual value: '0123', scopes: scopeLineOver70
+      expect(tokens[3]).toEqual value: '.', scopes: scopeTrailingPeriod
 
       {tokens} = grammar.tokenizeLine("m234567890123456789012345678901234567890123456789012345678901234567890123.", null, true)
       expect(tokens[0]).toEqual value: 'm', scopes: scopeLeadingLowercase
       expect(tokens[1]).toEqual value: '2345678901234567890123456789012345678901234567890', scopes: scopeNormal
       expect(tokens[2]).toEqual value: '1234567890123456789', scopes: scopeLineOver50
-      expect(tokens[3]).toEqual value: '0123.', scopes: scopeLineOver70
+      expect(tokens[3]).toEqual value: '0123', scopes: scopeLineOver70
+      expect(tokens[4]).toEqual value: '.', scopes: scopeTrailingPeriod
 
   describe "Git rebases", ->
     beforeEach ->
