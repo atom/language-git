@@ -46,7 +46,7 @@
       }
       {
         # Subject line 70 chars or longer
-        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,19})(.*?)([.]?)$'
+        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,19})(.*?)(\\.?)$'
         'captures':
           '2':
             'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
