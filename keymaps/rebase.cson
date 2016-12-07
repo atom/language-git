@@ -1,0 +1,7 @@
+"atom-text-editor[data-grammar='text git-rebase']":
+  'p': 'language-git:pick'
+  'r': 'language-git:reword'
+  'e': 'language-git:edit'
+  'f': 'language-git:fixup'
+  's': 'language-git:squash'
+  'd': 'language-git:drop'
