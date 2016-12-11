@@ -20,6 +20,11 @@ This package uses warning and error highlighting to help bring attention to some
 1. If the subject line ends with a period
 1. If any non-comment body line goes beyond 72 characters
 
+## Diff highlighting
+
+If [language-diff](https://atom.io/packages/language-diff) is installed, the
+diff part of `git commit --verbose` messages is highlighted as well.
+
 ## Background
 
 Originally [converted](http://flight-manual.atom.io/hacking-atom/sections/converting-from-textmate) from the [Git TextMate bundle](https://github.com/textmate/git.tmbundle).
