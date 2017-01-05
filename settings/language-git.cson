@@ -5,3 +5,10 @@
   'editor':
     'foldEndPattern': '^---'
     'preferredLineLength': 72
+'.text.git-rebase':
+  'autocomplete':
+    'symbols':
+      'function':
+        'selector': 'support.function.git-rebase'
+        'typePriority': 1
+        'suggestions': ['pick', 'reword', 'edit', 'squash', 'fixup', 'drop']
