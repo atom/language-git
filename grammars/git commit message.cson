@@ -32,8 +32,8 @@
             'name': 'invalid.illegal.subject-no-trailing-period.git-commit'
       }
       {
-        # Subject line 51-69 chars
-        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,18})((\\.)|(.))$'
+        # Subject line 51-72 chars
+        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,21})((\\.)|(.))$'
         'captures':
           '2':
             'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
@@ -45,8 +45,8 @@
             'name': 'invalid.deprecated.line-too-long.git-commit'
       }
       {
-        # Subject line 70 chars or longer
-        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,19})(.*?)(\\.?)$'
+        # Subject line 73 chars or longer
+        'match': '\\A(?!#)(([a-z])|.).{49}(.{0,22})(.*?)(\\.?)$'
         'captures':
           '2':
             'name': 'invalid.illegal.first-char-should-be-uppercase.git-commit'
